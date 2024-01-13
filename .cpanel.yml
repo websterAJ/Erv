@@ -1,7 +1,7 @@
 ---
 deployment:
       tasks:
-        - export DEPLOYPATH=/home/<username>/public_html/admin.ervzla.com
+        - export DEPLOYPATH=/home/ervzlaco/public_html/admin.ervzla.com
         - /bin composer install
         - /bin npm install
         - /bin npm run build
