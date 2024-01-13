@@ -39,6 +39,7 @@ class UsersSeeder extends Seeder
             $usuariodta->persona_id = $personasdta->id;
             $usuariodta->estatus_id = $estatusId;
             $usuariodta->save();
+            $usuariodta->assignRole('administrator');
         }
     }
 }

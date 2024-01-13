@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             AscensosSeeder::class,
             TipoPersonaSeeder::class,
             EstatusSeeder::class,
+            permissions::class,
             UsersSeeder::class
         ]);
     }
