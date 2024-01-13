@@ -1,0 +1,8 @@
+---
+deployment:
+      tasks:
+        - export DEPLOYPATH=/home/<username>/public_html/admin
+        - /bin composer install
+        - /bin npm install
+        - /bin npm run build
+        - /bin cp * $DEPLOYPATH
