@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
 
-class PermisosController extends Controller
+class WebController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Show the form for creating the resource.
      */
@@ -32,10 +27,7 @@ class PermisosController extends Controller
      */
     public function show()
     {
-        $dta = Permission::select("id","name")
-            ->get()
-            ->toArray();
-        return view('list',['data' => $dta,'columnas'=>array_keys($dta[0]),"createURL"=>'/admin/permisos/registro']);
+        //
     }
 
     /**

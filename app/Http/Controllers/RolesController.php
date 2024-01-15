@@ -31,7 +31,7 @@ class RolesController extends Controller
         $dta = Role::select("id","name")
         ->get()
         ->toArray();
-        return view('list',['data' => $dta,'columnas'=>array_keys($dta[0])]);
+        return view('list',['data' => $dta,'columnas'=>array_keys($dta[0]),"createURL"=>'/admin/roles/registro']);
     }
 
     /**

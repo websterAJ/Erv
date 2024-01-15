@@ -2,6 +2,7 @@
 
 
 return [
+    'cant_oficiales'              => 'Cantidad de oficiales',
     'Zona'                        => 'Zona',
     'comprobante'                 => 'Comprobante',
     'Estatus'                     => 'Estatus',

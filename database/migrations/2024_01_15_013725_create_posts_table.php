@@ -11,11 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('zonas', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string("nombre");
-            $table->integer("cant_oficiales")->nullable();
+            $table->string("titulo");
+            $table->string("resumen");
+            $table->text("contenido");
+            $table->integer("categoria_id");
             $table->boolean("activo");
+            $table->foreign("categoria_id")
+                ->references('id')
+                ->on("categorias")
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('zonas');
+        Schema::dropIfExists('posts');
     }
 };

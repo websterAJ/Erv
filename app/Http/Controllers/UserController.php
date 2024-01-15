@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\personas;
 use App\Models\estatus;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -28,6 +29,20 @@ class UserController extends Controller
     {
         abort(404);
     }
+     /**
+     * Display the resource.
+     */
+    public function perfil()
+    {
+
+        $users = User::select("*")
+            ->join('personas', 'users.persona_id', '=', 'personas.id')
+            ->join('estatus', 'users.estatus_id', '=', 'estatus.id')
+            ->where('users.id','=',Auth::id())
+            ->get()
+            ->toArray();
+        return view('perfil',['data' => $users,'columnas'=>array_keys($users[0]),"createURL"=>'/admin/usuarios/registro']);
+    }
 
     /**
      * Display the resource.
@@ -41,7 +56,7 @@ class UserController extends Controller
             ->join('estatus', 'users.estatus_id', '=', 'estatus.id')
             ->get()
             ->toArray();
-        return view('list',['data' => $users,'columnas'=>array_keys($users[0])]);
+        return view('list',['data' => $users,'columnas'=>array_keys($users[0]),"createURL"=>'/admin/usuarios/registro']);
     }
 
     /**

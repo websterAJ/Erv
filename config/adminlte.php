@@ -385,6 +385,32 @@ return [
                 ]
             ],
         ],
+        [
+            'text'    => 'Pagina Web',
+            'icon'    => 'fas fa-fw fa-globe',
+            'submenu' => [
+                [
+                    'text' => 'Banner',
+                    'icon'    => 'fas fa-fw fa-image',
+                    'url'  => '/web/banner',
+                ],
+                [
+                    'text' => 'Blog',
+                    'icon'    => 'fas fa-fw fa-blog',
+                    'url'  => '/web/blog',
+                ],
+                [
+                    'text' => 'Evento',
+                    'icon'    => 'fas fa-fw fa-calendar',
+                    'url'  => '/web/evento',
+                ],
+                [
+                    'text'    => 'Reporte',
+                    'icon'    => 'fas fa-fw fa-chart-pie',
+                    'url'     => '/web/contactanos',
+                ]
+            ],
+        ],
         ['header' => 'settings','can'    => 'manage-config'],
 
         [

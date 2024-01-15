@@ -20,7 +20,21 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/perfil', [App\Http\Controllers\UserController::class, 'show'])->name('perfil');
+Route::get('/perfil', [App\Http\Controllers\UserController::class, 'perfil'])->name('perfil');
+
+Route::prefix('web')->group(function () {
+    Route::get('/', [App\Http\Controllers\WebController::class, 'show']);
+    Route::get('/banner', [App\Http\Controllers\WebController::class, 'show']);
+    Route::get('/blog', [App\Http\Controllers\WebController::class, 'show']);
+    Route::get('/evento', [App\Http\Controllers\WebController::class, 'show']);
+    Route::get('/contactonos', [App\Http\Controllers\WebController::class, 'show']);
+
+    Route::get('/registro', [App\Http\Controllers\WebController::class, 'create']);
+    Route::get('/resumen', [App\Http\Controllers\WebController::class, 'show']);
+    Route::get('/reporte', [App\Http\Controllers\WebController::class, 'show']);
+    Route::post('/', [App\Http\Controllers\WebController::class, 'create']);
+    Route::post('/update', [App\Http\Controllers\WebController::class, 'update']);
+});
 
 Route::prefix('zonas')->group(function () {
     Route::get('/', [App\Http\Controllers\ZonasController::class, 'show']);
