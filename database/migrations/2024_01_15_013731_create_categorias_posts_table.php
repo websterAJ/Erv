@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('categorias_posts', function (Blueprint $table) {
             $table->id();
-            $table->integer("categoria_id");
-            $table->integer("post_id");
+            $table->unsignedBigInteger("categoria_id");
+            $table->unsignedBigInteger("post_id");
             $table->foreign("categoria_id")
                 ->references('id')
                 ->on("categorias")

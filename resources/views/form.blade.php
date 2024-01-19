@@ -13,12 +13,12 @@
                 <form id="NewRegister" method="POST" {{$file ? 'enctype="multipart/form-data"' : ''}}>
                     <div class="card-body">
                         {{ csrf_field() }}
-                        @foreach ($campos as $item)
-                            @if ($item->column_name != 'id' && $item->column_name != 'created_at' && $item->column_name != 'updated_at' && $item->column_name != 'estatus_id')
+                        @foreach ($campos as $key => $value)
+                            @if ($campos[$key]->Field != 'id' && $campos[$key]->Field != 'created_at' && $campos[$key]->Field != 'updated_at' && $campos[$key]->Field != 'estatus_id')
                                 <div class="form-group">
                                     @php
                                         $label = "";
-                                        switch ($item->column_name) {
+                                        switch ($campos[$key]->Field) {
                                             case 'cuota_id':
                                                 $label= "Cuota";
                                                 break;
@@ -29,15 +29,15 @@
                                                 $label= "Zona";
                                                 break;
                                             default:
-                                                $label= $item->column_name;
+                                                $label= $campos[$key]->Field;
                                                 break;
                                         }
                                     @endphp
-                                    <label for="{{$item->column_name}}">{{__('adminlte::adminlte.'.$label)}}</label>
-                                    @if ($item->column_name == "cuota_id" || $item->column_name == 'estatus_id' || $item->column_name == 'zona_id')
-                                        <select name="{{$item->column_name}}" id="{{$item->column_name}}" class="form-control {{$errors->has($item->column_name) ? 'is-invalid' : ''}}">
+                                    <label for="{{$campos[$key]->Field}}">{{__('adminlte::adminlte.'.$label)}}</label>
+                                    @if ($campos[$key]->Field == "categoria_id" ||$campos[$key]->Field == "cuota_id" || $campos[$key]->Field == 'estatus_id' || $campos[$key]->Field == 'zona_id')
+                                        <select name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
                                             <option value="0">Seleccionar una opcion</option>
-                                            @switch($item->column_name)
+                                            @switch($campos[$key]->Field)
                                                 @case("cuota_id")
                                                     @foreach ($cuota as $option)
                                                         <option value="{{$option['id']}}">{{$option['nombre']." ".$option['monto']." ".$option['fecha']}}</option>
@@ -53,25 +53,30 @@
                                                         <option value="{{$option['id']}}">{{$option['nombre']}}</option>
                                                     @endforeach
                                                     @break
+                                                @case('categoria_id')
+                                                    @foreach ($categorias as $option)
+                                                        <option value="{{$option['id']}}">{{$option['nombre']}}</option>
+                                                    @endforeach
+                                                    @break
                                             @endswitch
                                         </select>
-                                    @elseif ($item->data_type == "boolean")
-                                        <select name="{{$item->column_name}}" id="{{$item->column_name}}" class="form-control {{$errors->has($item->column_name) ? 'is-invalid' : ''}}">
+                                    @elseif ($campos[$key]->Type == "boolean" || $campos[$key]->Type == "tinyint(1)")
+                                        <select name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
                                             <option value="">Seleccionar una opcion</option>
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
                                         </select>
-                                    @elseif ($item->column_name == "comprobante")
-                                        <input type="file" name="{{$item->column_name}}" id="{{$item->column_name}}" class="form-control {{$errors->has($item->column_name) ? 'is-invalid' : ''}}" accept="image/*,.pdf">
+                                    @elseif ($campos[$key]->Field == "comprobante" || $campos[$key]->Field == "imagen")
+                                        <input type="file" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}" accept="image/*,.pdf">
                                     @else
-                                        @if($item->data_type == "text" || $item->data_type == "character varying")
-                                            <input type="text" name="{{$item->column_name}}" id="{{$item->column_name}}" class="form-control {{$errors->has($item->column_name) ? 'is-invalid' : ''}}">
-                                        @elseif($item->data_type == "integer" || $item->data_type == "bigint" )
-                                            <input type="number" name="{{$item->column_name}}" id="{{$item->column_name}}" class="form-control {{$errors->has($item->column_name) ? 'is-invalid' : ''}}">
-                                        @elseif($item->data_type == "decimal" || $item->data_type == "float" || $item->data_type == "numeric" || $item->data_type == "double precision")
-                                            <input type="number" name="{{$item->column_name}}" id="{{$item->column_name}}" class="form-control {{$errors->has($item->column_name) ? 'is-invalid' : ''}}" step="any">
-                                        @elseif($item->data_type == "date")
-                                            <input type="date" name="{{$item->column_name}}" id="{{$item->column_name}}" class="form-control {{$errors->has($item->column_name) ? 'is-invalid' : ''}}">
+                                        @if($campos[$key]->Type == "text" || $campos[$key]->Type == "varchar(255)")
+                                            <input type="text" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
+                                        @elseif($campos[$key]->Type == "integer" || $campos[$key]->Type == "bigint" || $campos[$key]->Type == "int" )
+                                            <input type="number" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
+                                        @elseif($campos[$key]->Type == "decimal(8,2)" || $campos[$key]->Type == "decimal" || $campos[$key]->Type == "float" || $campos[$key]->Type == "numeric" || $campos[$key]->Type == "double precision" || $campos[$key]->Type == "double")
+                                            <input type="number" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}" step="any">
+                                        @elseif($campos[$key]->Type == "date")
+                                            <input type="date" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
                                         @endif
                                     @endif
 

@@ -2,6 +2,11 @@
 
 
 return [
+    'titulo'                      => 'Titulo',
+    'resumen'                     => 'Resumen',
+    'contenido'                   => 'Contenido',
+    'categoria_id'                => 'Categoria',
+    'imagen'                      => 'Imagen',
     'cant_oficiales'              => 'Cantidad de oficiales',
     'Zona'                        => 'Zona',
     'comprobante'                 => 'Comprobante',

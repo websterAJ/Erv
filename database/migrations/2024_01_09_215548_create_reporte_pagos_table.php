@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('referencia');
             $table->date('fecha');
-            $table->integer('cuota_id');
+            $table->unsignedBigInteger('cuota_id');
             $table->decimal('monto', 8, 2)->default(0.00);
-            $table->integer('estatus_id');
+            $table->unsignedBigInteger('estatus_id');
             $table->string('comprobante');
             $table->foreign("cuota_id")
                 ->references('id')

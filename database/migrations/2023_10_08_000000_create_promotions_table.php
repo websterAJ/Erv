@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("nombre");
             $table->boolean("activo");
-            $table->integer("tipo_ascensos_id");
-            $table->foreign("tipo_ascensos_id")
+            $table->unsignedBigInteger("tipo_id");
+            $table->foreign("tipo_id")
                 ->references('id')
                 ->on("tipo_ascensos")
                 ->onDelete('cascade');

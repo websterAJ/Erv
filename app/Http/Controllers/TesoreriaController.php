@@ -24,26 +24,10 @@ class TesoreriaController extends Controller
     }
     public function createCuota()
     {
-        $table = DB::table('information_schema.columns')
-        ->select(['column_name','data_type'])
-        ->where("table_name",'=','cuotaszonas')
-        ->get()
-        ->toArray();
         $data = array();
-        $data['campos'] = $table;
+        $data= $this->DescribeTabla('cuotaszonas');
         $data['url'] = '/tesoreria/cuota/registro';
         $data['file'] = false;
-
-        foreach ($table as $object) {
-            if ($object->column_name === 'estatus_id') {
-                $status = estatus::all(['nombre','id'])->toArray();
-                $data['status']=$status;
-            }
-            if ($object->column_name === 'zona_id') {
-                $zonas = zonas::all(['nombre','id'])->toArray();
-                $data['zonas']=$zonas;
-            }
-        }
 
         return view('form',$data);
     }
@@ -76,30 +60,11 @@ class TesoreriaController extends Controller
 
     public function create()
     {
-        $table = DB::table('information_schema.columns')
-        ->select(['column_name','data_type'])
-        ->where("table_name",'=','reporte_pagos')
-        ->get()
-        ->toArray();
+
         $data = array();
-        $data['campos'] = $table;
+        $data= $this->DescribeTabla('reporte_pagos');
         $data['url'] = '/tesoreria/registro';
         $data['file'] = true;
-        foreach ($table as $object) {
-            if ($object->column_name === 'estatus_id') {
-                $status = estatus::all(['nombre','id'])->toArray();
-                $data['status']=$status;
-            }
-            if($object->column_name === 'cuota_id'){
-                $cuotas = cuotaszonas::join('zonas as z','z.id','=','cuotaszonas.zona_id')
-                ->select('cuotaszonas.id','z.nombre','cuotaszonas.fecha','cuotaszonas.monto')
-                ->where('cuotaszonas.estatus_id',"=","5")
-                ->get()
-                ->toArray();
-                $data['cuota'] = $cuotas;
-            }
-        }
-
         return view('form',$data);
     }
 

@@ -29,7 +29,7 @@ Route::prefix('web')->group(function () {
     Route::get('/evento', [App\Http\Controllers\WebController::class, 'show']);
     Route::get('/contactonos', [App\Http\Controllers\WebController::class, 'show']);
 
-    Route::get('/registro', [App\Http\Controllers\WebController::class, 'create']);
+    Route::get('/create/{tabla}', [App\Http\Controllers\WebController::class, 'create']);
     Route::get('/resumen', [App\Http\Controllers\WebController::class, 'show']);
     Route::get('/reporte', [App\Http\Controllers\WebController::class, 'show']);
     Route::post('/', [App\Http\Controllers\WebController::class, 'create']);

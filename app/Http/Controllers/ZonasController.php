@@ -13,16 +13,10 @@ class ZonasController extends Controller
      */
     public function create()
     {
-        $table = DB::table('information_schema.columns')
-        ->select(['column_name','data_type'])
-        ->where("table_name",'=','zonas')
-        ->get()
-        ->toArray();
         $data = array();
-        $data['campos'] = $table;
+        $data= $this->DescribeTabla('zonas');
         $data['url'] = '/zonas/registro';
-        $data['file'] = true;
-
+        $data['file'] = false;
         return view('form',$data);
     }
 

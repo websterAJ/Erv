@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("nombre");
             $table->boolean("activo");
-            $table->integer("zonas_id");
+            $table->unsignedBigInteger("zonas_id");
             $table->foreign("zonas_id")
                 ->references('id')
                 ->on("zonas")

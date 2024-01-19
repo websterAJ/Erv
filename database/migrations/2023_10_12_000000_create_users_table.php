@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('nick');
             $table->string('password');
             $table->rememberToken();
-            $table->integer('persona_id');
-            $table->integer('estatus_id');
+            $table->unsignedBigInteger('persona_id');
+            $table->unsignedBigInteger('estatus_id');
             $table->foreign("persona_id")
                 ->references('id')
                 ->on("personas")

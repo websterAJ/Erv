@@ -20,7 +20,7 @@ class AscensosSeeder extends Seeder
         if($dtatipo_ascensos->save()){
             $dtaAscensos = new ascensos();
             $dtaAscensos->nombre = 'N/A';
-            $dtaAscensos->tipo_ascensos_id =$dtatipo_ascensos->id;
+            $dtaAscensos->tipo_id =$dtatipo_ascensos->id;
             $dtaAscensos->activo = true;
             $dtaAscensos->save();
         }

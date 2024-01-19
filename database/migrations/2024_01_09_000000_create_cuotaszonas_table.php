@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('cuotaszonas', function (Blueprint $table) {
             $table->id();
             $table->date('fecha');
-            $table->integer('zona_id');
-            $table->integer('estatus_id');
+            $table->unsignedBigInteger('zona_id');
+            $table->unsignedBigInteger('estatus_id');
             $table->decimal('monto', 8, 2)->default(0.00);
             $table->foreign("zona_id")
                 ->references('id')

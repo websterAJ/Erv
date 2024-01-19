@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('correo')->unique();
             $table->string('telefono');
             $table->string('direccion');
-            $table->integer('tipo_personas_id');
-            $table->integer('estatus_id');
-            $table->integer('ascensos_id');
+            $table->unsignedBigInteger('tipo_personas_id');
+            $table->unsignedBigInteger('estatus_id');
+            $table->unsignedBigInteger('ascensos_id');
             $table->foreign("tipo_personas_id")
                 ->references('id')
                 ->on("tipo_personas")

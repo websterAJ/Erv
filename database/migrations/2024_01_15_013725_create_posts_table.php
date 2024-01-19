@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("titulo");
             $table->string("resumen");
             $table->text("contenido");
-            $table->integer("categoria_id");
+            $table->unsignedBigInteger("categoria_id");
             $table->boolean("activo");
             $table->foreign("categoria_id")
                 ->references('id')

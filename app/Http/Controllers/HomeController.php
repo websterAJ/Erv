@@ -30,26 +30,11 @@ class HomeController extends Controller
         $dta = config::select("*")->get()->toArray();
         $view="";
         $data = array();
+
         if(count($dta) <= 0){
-            $table = DB::table('information_schema.columns')
-                ->select(['column_name','data_type'])
-                ->where("table_name",'=','configs')
-                ->get()
-                ->toArray();
-            $data['campos'] = $table;
+            $data= $this->DescribeTabla('configs');
             $data['url'] = '/admin/config';
             $data['file'] = false;
-
-            foreach ($table as $object) {
-                if ($object->column_name === 'estatus_id') {
-                    $status = estatus::all(['nombre','id'])->toArray();
-                    $data['status']=$status;
-                }
-                if ($object->column_name === 'zona_id') {
-                    $zonas = zonas::all(['nombre','id'])->toArray();
-                    $data['zonas']=$zonas;
-                }
-            }
             $view='form';
         }else{
             $view="home";
