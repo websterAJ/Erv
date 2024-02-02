@@ -2,6 +2,17 @@
 
 
 return [
+    'costo'                       => 'Costo',
+    'flayer'                      => 'Flayer',
+    'fecha_nacimiento'            => 'Fecha de nacimiento',
+    'genero'                      => 'Genero',
+    'cedula'                      => 'Cedula',
+    'telefono'                    => 'Telefono',
+    'direccion'                   => 'Direccion',
+    'tipo_personas_id'            => 'Tipo de persona',
+    'estatus_id'                  => 'Estatus',
+    'ascensos_id'                 => 'Ascenso',
+    'persona_id'                  => 'Data personal',
     'titulo'                      => 'Titulo',
     'resumen'                     => 'Resumen',
     'contenido'                   => 'Contenido',

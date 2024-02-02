@@ -14,7 +14,7 @@
                     <div class="card-body">
                         {{ csrf_field() }}
                         @foreach ($campos as $key => $value)
-                            @if ($campos[$key]->Field != 'id' && $campos[$key]->Field != 'created_at' && $campos[$key]->Field != 'updated_at' && $campos[$key]->Field != 'estatus_id')
+                            @if ($campos[$key]->Field != 'id' && $campos[$key]->Field != 'created_at' && $campos[$key]->Field != 'updated_at' && $campos[$key]->Field != 'estatus_id' && $campos[$key]->Field != 'remember_token')
                                 <div class="form-group">
                                     @php
                                         $label = "";
@@ -66,7 +66,27 @@
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
                                         </select>
-                                    @elseif ($campos[$key]->Field == "comprobante" || $campos[$key]->Field == "imagen")
+                                    @elseif ($campos[$key]->Field == "contenido" || $campos[$key]->Field == "resumen")
+                                        @php
+                                            $config = [
+                                                "height" => "250",
+                                                "toolbar" => [
+                                                    // [groupName, [list of button]]
+                                                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                                                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                                                    ['fontsize', ['fontsize']],
+                                                    ['color', ['color']],
+                                                    ['para', ['ul', 'ol', 'paragraph']],
+                                                    ['height', ['height']],
+                                                    ['table', ['table']],
+                                                    ['insert', ['link', 'picture']],
+                                                    ['view', ['fullscreen', 'help']],
+                                                ],
+                                            ]
+                                        @endphp
+                                        <x-adminlte-text-editor name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" label-class="text-danger"
+                                        igroup-size="sm" :config="$config"/>
+                                    @elseif ($campos[$key]->Field == "comprobante" || $campos[$key]->Field == "imagen" || $campos[$key]->Field == "flayer")
                                         <input type="file" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}" accept="image/*,.pdf">
                                     @else
                                         @if($campos[$key]->Type == "text" || $campos[$key]->Type == "varchar(255)")

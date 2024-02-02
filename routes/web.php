@@ -30,10 +30,22 @@ Route::prefix('web')->group(function () {
     Route::get('/contactonos', [App\Http\Controllers\WebController::class, 'show']);
 
     Route::get('/create/{tabla}', [App\Http\Controllers\WebController::class, 'create']);
+    Route::post('/create/{tabla}', [App\Http\Controllers\WebController::class, 'store']);
     Route::get('/resumen', [App\Http\Controllers\WebController::class, 'show']);
     Route::get('/reporte', [App\Http\Controllers\WebController::class, 'show']);
     Route::post('/', [App\Http\Controllers\WebController::class, 'create']);
     Route::post('/update', [App\Http\Controllers\WebController::class, 'update']);
+});
+
+Route::prefix('intendencia')->group(function () {
+    Route::get('/producto', [App\Http\Controllers\IntendenciaController::class, 'show']);
+    Route::get('/pedido', [App\Http\Controllers\IntendenciaController::class, 'show']);
+    Route::get('/resumen', [App\Http\Controllers\IntendenciaController::class, 'show']);
+    Route::get('/reporte', [App\Http\Controllers\IntendenciaController::class, 'show']);
+    Route::get('/create/{tabla}', [App\Http\Controllers\IntendenciaController::class, 'create']);
+    Route::post('/create/{tabla}', [App\Http\Controllers\IntendenciaController::class, 'store']);
+    Route::post('/', [App\Http\Controllers\IntendenciaController::class, 'create']);
+    Route::post('/update', [App\Http\Controllers\IntendenciaController::class, 'update']);
 });
 
 Route::prefix('zonas')->group(function () {
@@ -58,6 +70,13 @@ Route::prefix('tesoreria')->group(function () {
 });
 
 Route::prefix('admin')->group(function () {
+    Route::prefix('usuarios')->group(function () {
+        Route::get('/', [App\Http\Controllers\UserController::class, 'show']);
+        Route::get('/registro', [App\Http\Controllers\UserController::class, 'create']);
+        Route::post('/registro', [App\Http\Controllers\UserController::class, 'store']);
+        Route::post('/update', [App\Http\Controllers\UserController::class, 'update']);
+        Route::post('/delete', [App\Http\Controllers\UserController::class, 'delete']);
+    });
     Route::get('/usuarios', [App\Http\Controllers\UserController::class, 'show'])->name('usuarios');
     Route::get('/permisos', [App\Http\Controllers\PermisosController::class, 'show'])->name('permisos');
     Route::get('/roles', [App\Http\Controllers\RolesController::class, 'show'])->name('roles');

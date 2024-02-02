@@ -7,6 +7,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\estatus;
 use App\Models\zonas;
+use App\Models\ascensos;
+use App\Models\tipo_personas;
 use App\Models\cuotaszonas;
 use App\Models\categorias;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +26,14 @@ class Controller extends BaseController
             foreach ($object as $key =>$value) {
                 if($key == 'Field'){
                     switch($value){
+                        case 'tipo_personas_id':
+                            $tipoPersona = tipo_personas::all(['nombre','id'])->toArray();
+                            $data['tipoPersona']=$tipoPersona;
+                            break;
+                        case 'ascensos_id':
+                            $ascensos = ascensos::all(['nombre','id'])->toArray();
+                            $data['ascensos']=$ascensos;
+                            break;
                         case 'estatus_id':
                             $status = estatus::all(['nombre','id'])->toArray();
                             $data['status']=$status;

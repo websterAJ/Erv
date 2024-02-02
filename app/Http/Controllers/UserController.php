@@ -17,9 +17,14 @@ class UserController extends Controller
     /**
      * Show the form for creating the resource.
      */
-    public function create(): never
+    public function create()
     {
-        abort(404);
+        $data = array();
+        $data= $this->DescribeTabla('users');
+        $data['persona']= $this->DescribeTabla('personas');
+        $data['url'] = '/admin/usuarios/registro';
+        $data['file'] = false;
+        return view('form_user',$data);
     }
 
     /**
