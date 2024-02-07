@@ -4,24 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Models\pedidos;
 use App\Models\productos;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 class IntendenciaController extends Controller
 {
     /**
      * Show the form for creating the resource.
      */
-    public function create(): never
+    public function create()
     {
-        abort(404);
+        $data = array();
+        $data= $this->DescribeTabla('productos');
+        $data['url'] = '/intendencia/create/producto';
+        $data['file'] = true;
+        return view('form',$data);
     }
 
     /**
      * Store the newly created resource in storage.
      */
-    public function store(Request $request): never
+    public function store(Request $request)
     {
-        abort(404);
+        $SaveData =false;
+        $file = $request->file('imagen');
+        $filename  = time()."-".$file->getClientOriginalName();
+        Storage::disk('local')->put("public/productos/".$filename, File::get($file));
+        $productos = new productos();
+        $productos->imagen = $filename;
+        $productos->nombre = $request->input('nombre');
+        $productos->descripcion = $request->input('descripcion');
+        $productos->cantidad = $request->input('cantidad');
+        $productos->precio = $request->input('precio');
+        $productos->activo = $request->input('activo');
+        $SaveData=$productos->save();
+        if($SaveData){
+            return response()->json([
+                'status'    => 'success',
+                'msg'       => "information successfully registered"
+            ]);
+        }else{
+            return response()->json([
+                'status'    => 'error',
+                'msg'       => "information could not be successfully registered"
+            ]);
+        }
     }
 
     /**

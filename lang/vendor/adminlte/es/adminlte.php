@@ -2,6 +2,9 @@
 
 
 return [
+    'descripcion'                 => 'Descripcion',
+    'stock'                       => 'Cantidad',
+    'precio'                      => 'Precio',
     'costo'                       => 'Costo',
     'flayer'                      => 'Flayer',
     'fecha_nacimiento'            => 'Fecha de nacimiento',

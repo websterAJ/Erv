@@ -60,7 +60,6 @@ class TesoreriaController extends Controller
 
     public function create()
     {
-
         $data = array();
         $data= $this->DescribeTabla('reporte_pagos');
         $data['url'] = '/tesoreria/registro';
