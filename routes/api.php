@@ -18,4 +18,5 @@ Route::get('/blog', [App\Http\Controllers\WebController::class, 'index']);
 Route::get('/galeria', [App\Http\Controllers\WebController::class, 'index']);
 Route::get('/eventos', [App\Http\Controllers\WebController::class, 'index']);
 Route::get('/contacto', [App\Http\Controllers\WebController::class, 'index']);
-
+Route::get('/productos', [App\Http\Controllers\IntendenciaController::class, 'index']);
+Route::get('/categorias', [App\Http\Controllers\IntendenciaController::class, 'index']);

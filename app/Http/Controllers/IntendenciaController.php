@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\categorias;
 use App\Models\pedidos;
 use App\Models\productos;
 
@@ -10,6 +11,39 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 class IntendenciaController extends Controller
 {
+    public function index(Request $request){
+        $dta = array();
+        $result = (object) array();
+        $status =200;
+        if($request->is('api/categorias')){
+            $dta = categorias::select(['*'])->where('activo',"=","1")->get()->toArray();
+        }else if($request->is('api/productos')){
+            $sql = productos::select(['id','nombre', 'descripcion', 'stock', 'precio', 'imagen'])->where('activo',"=","1")->get()->toArray();
+            $dataConvert = array();
+            foreach ($sql as $key=>$value) {
+                $aux                = (object)array();
+                $aux->id            = $value["id"];
+                $aux->nombre        = $value["nombre"];
+                $aux->descripcion   = $value["descripcion"];
+                $aux->stock         = $value["stock"];
+                $aux->precio        = $value["precio"];
+                $aux->imagen        = url('storage/productos/').'/'.$value["imagen"];
+                array_push($dataConvert,$aux);
+            }
+            $dta = $dataConvert;
+        }
+        if(count($dta)<=0){
+            $status=400;
+            $result->error = true;
+            $result->message = "Data no Disponible";
+        }else{
+            $result->error = false;
+            $result->message = "Operacion realizada con exito";
+            $result->data = $dta;
+        }
+
+        return response()->json($result, $status);
+    }
     /**
      * Show the form for creating the resource.
      */
@@ -31,14 +65,14 @@ class IntendenciaController extends Controller
         $file = $request->file('imagen');
         $filename  = time()."-".$file->getClientOriginalName();
         Storage::disk('local')->put("public/productos/".$filename, File::get($file));
-        $productos = new productos();
-        $productos->imagen = $filename;
-        $productos->nombre = $request->input('nombre');
+        $productos              = new productos();
+        $productos->imagen      = $filename;
+        $productos->nombre      = $request->input('nombre');
         $productos->descripcion = $request->input('descripcion');
-        $productos->cantidad = $request->input('cantidad');
-        $productos->precio = $request->input('precio');
-        $productos->activo = $request->input('activo');
-        $SaveData=$productos->save();
+        $productos->stock       = $request->input('stock');
+        $productos->precio      = $request->input('precio');
+        $productos->activo      = $request->input('activo');
+        $SaveData               = $productos->save();
         if($SaveData){
             return response()->json([
                 'status'    => 'success',
