@@ -96,7 +96,7 @@ class IntendenciaController extends Controller
         $columnas = array();
         if ($request->is('intendencia/producto')) {
             $createURL ='/intendencia/create/producto';
-            $dta = productos::select(['*'])->get()->toArray();
+            $dta = productos::select(['id','nombre', 'descripcion', 'stock', 'precio', 'imagen'])->get()->toArray();
         }else if($request->is('intendencia/pedido')){
             $createURL ='/intendencia/create/pedido';
             $dta = pedidos::select(['*'])->get()->toArray();

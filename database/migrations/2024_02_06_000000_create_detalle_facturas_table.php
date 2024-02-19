@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('detalle_facturas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger("producto_id");
+            $table->unsignedBigInteger("carrito_id");
+            $table->integer('cantidad');
+            $table->decimal('subtotal', 8, 2)->default(0.00);
+            $table->foreign("carrito_id")
+                ->references('id')
+                ->on("carrito")
+                ->onDelete('cascade');
+            $table->foreign("producto_id")
+                ->references('id')
+                ->on("productos")
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

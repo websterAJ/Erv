@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('carritos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger("usuario_id");
+            $table->unsignedBigInteger("status_id");
+            $table->date('fecha');
+            $table->decimal('total', 8, 2)->default(0.00);
+            $table->double('iva');
+            $table->foreign("usuario_id")
+            ->references('id')
+            ->on("usuarios")
+            ->onDelete('cascade');
+            $table->foreign("status_id")
+            ->references('id')
+            ->on("estatus")
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }
