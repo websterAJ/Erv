@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('subtotal', 8, 2)->default(0.00);
             $table->foreign("carrito_id")
                 ->references('id')
-                ->on("carrito")
+                ->on("carritos")
                 ->onDelete('cascade');
             $table->foreign("producto_id")
                 ->references('id')

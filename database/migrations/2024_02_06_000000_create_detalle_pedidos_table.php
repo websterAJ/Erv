@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('detalle_pedidos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("producto_id");
-            $table->unsignedBigInteger("carrito_id");
+            $table->unsignedBigInteger("pedidos_id");
             $table->integer('cantidad');
             $table->decimal('subtotal', 8, 2)->default(0.00);
-            $table->foreign("carrito_id")
+            $table->foreign("pedidos_id")
                 ->references('id')
-                ->on("carrito")
+                ->on("pedidos")
                 ->onDelete('cascade');
             $table->foreign("producto_id")
                 ->references('id')

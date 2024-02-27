@@ -53,7 +53,7 @@ class WebController extends Controller
             case 'banner':
                 $file = $request->file('imagen');
                 $filename  = time()."-".$file->getClientOriginalName();
-                Storage::disk('local')->put("public/banner/".$filename, File::get($file));
+                Storage::disk('local')->put("public/banner/".trim($filename," \n\r\t\v\0"), File::get($file));
                 $banner = new banner();
                 $banner->imagen = $filename;
                 $banner->activo = $request->input('activo');
@@ -62,7 +62,7 @@ class WebController extends Controller
             case 'blog':
                 $file = $request->file('imagen');
                 $filename  = time()."-".$file->getClientOriginalName();
-                Storage::disk('local')->put("public/blog/".$filename, File::get($file));
+                Storage::disk('local')->put("public/blog/".trim($filename," \n\r\t\v\0"), File::get($file));
                 $post = new post();
                 $post->imagen = $filename;
                 $post->titulo = $request->input('titulo');;
@@ -75,7 +75,7 @@ class WebController extends Controller
                 case 'evento':
                     $file = $request->file('flayer');
                     $filename  = time()."-".$file->getClientOriginalName();
-                    Storage::disk('local')->put("public/flayer/".$filename, File::get($file));
+                    Storage::disk('local')->put("public/flayer/".trim($filename," \n\r\t\v\0"), File::get($file));
                     $evento = new eventos();
                     $evento->flayer = $filename;
                     $evento->titulo = $request->input('titulo');;

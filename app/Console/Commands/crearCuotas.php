@@ -4,7 +4,9 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\zonas;
+use App\Models\config;
 use App\Models\cuotaszonas;
+use GuzzleHttp\Client;
 
 
 class crearCuotas extends Command
@@ -27,12 +29,21 @@ class crearCuotas extends Command
      * Execute the console command.
      */
     public function handle(){
-        $zonas = zonas::all(['id'])->get();
+        $baseUrl = env('API_ENDPOINT');
+        $client=new Client(['base_uri' => $baseUrl]);
+
+        $response = $client->request('GET', "");
+        $data = json_decode($response->getBody());
+
+
+
+        $zonas = zonas::select(['id'])->get();
+        $config = config::select(['8'])->first();
         foreach ($zonas as $key => $value) {
             $cuotas = new cuotaszonas();
             $cuotas->zona_id=$value['id'];
             $cuotas->fecha=date('Y-m-d');
-            $cuotas->monto=date('Y-m-d');
+            $cuotas->monto=($data->price * $config->monto_cuota) * $zonas->cant_oficiales;
         }
     }
 }

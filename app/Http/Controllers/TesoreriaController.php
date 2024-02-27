@@ -82,7 +82,7 @@ class TesoreriaController extends Controller
        // Guardar el comprobante en la carpeta correspondiente
        $file = $request->file('comprobante');
        $filename  = time()."-".$file->getClientOriginalName();
-       Storage::disk('local')->put("public/".$filename, File::get($file));
+       Storage::disk('local')->put("public/".trim($filename," \n\r\t\v\0"), File::get($file));
        // Guardar los datos del formulario en la BD sin el campo de imagen
        $abonos = new reportePago();
        $abonos->referencia = $request->input('referencia');

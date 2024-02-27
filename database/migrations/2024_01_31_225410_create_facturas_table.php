@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("usuario_id");
+            $table->unsignedBigInteger("users_id");
             $table->unsignedBigInteger("status_id");
             $table->date('fecha');
             $table->decimal('total', 8, 2)->default(0.00);
             $table->double('iva');
-            $table->foreign("usuario_id")
+            $table->foreign("users_id")
             ->references('id')
-            ->on("usuarios")
+            ->on("users")
             ->onDelete('cascade');
             $table->foreign("status_id")
             ->references('id')
