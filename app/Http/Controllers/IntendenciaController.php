@@ -64,7 +64,7 @@ class IntendenciaController extends Controller
                 foreach ($detalle_carrito as $key => $value) {
                     $detalle=new detalle_pedidos();
                     $detalle->cantidad=$value->cantidad;
-                    $detalle->subtotal=$value->precio;
+                    $detalle->subtotal=$value->subtotal;
                     $detalle->producto_id=$value->producto_id;
                     $detalle->pedidos_id=$pedido->id;
                     $saveDetalle = $detalle->save();
@@ -192,8 +192,9 @@ class IntendenciaController extends Controller
     public function getCarrito(Request $request){
         $this->validate($request,['id_user' => 'required']);
         $Carrito = carrito::select("*")
-            ->join('detalle_carritos', 'carritos.id', '=', 'detalle_carritos.carrito_id')
-        ->where('users.id','=',$request->input('id_user'))
+        ->join('detalle_carritos', 'carritos.id', '=', 'detalle_carritos.carrito_id')
+        ->join('productos', 'detalle_carritos.producto_id', '=', 'productos.id')
+        ->where('carritos.users_id', '=', $request->input('id_user'))
         ->get()
         ->toArray();
         if(count($Carrito)>0){
