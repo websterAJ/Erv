@@ -29,21 +29,33 @@ class crearCuotas extends Command
      * Execute the console command.
      */
     public function handle(){
-        $baseUrl = env('API_ENDPOINT');
-        $client=new Client(['base_uri' => $baseUrl]);
+        $url = env('API_ENDPOINT');
+        $curl = curl_init($url);
 
-        $response = $client->request('GET', "");
-        $data = json_decode($response->getBody());
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            "Accept: application/json"
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        $data = json_decode($response, true);
 
 
+        //$baseUrl = env('API_ENDPOINT');
+        //$client=new Client(['base_uri' => $baseUrl]);
+        //$response = $client->request('GET', "");
+        //$data = json_decode($response->getBody());
 
         $zonas = zonas::select(['id'])->get();
-        $config = config::select(['8'])->first();
+        $config = config::select(['*'])->first();
         foreach ($zonas as $key => $value) {
             $cuotas = new cuotaszonas();
             $cuotas->zona_id=$value['id'];
             $cuotas->fecha=date('Y-m-d');
-            $cuotas->monto=($data->price * $config->monto_cuota) * $zonas->cant_oficiales;
+            $cuotas->monto=($data['price'] * $config->monto_cuota) * $zonas->cant_oficiales;
+            $cuotas->save();
         }
     }
 }
