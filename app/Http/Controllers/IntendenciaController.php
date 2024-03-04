@@ -108,6 +108,44 @@ class IntendenciaController extends Controller
     public function createPago(){
 
     }
+    public function dltProducto(Request $request){
+        $this->validate($request,[
+            'producto_id'   => 'required',
+            'carrito_id'    => 'required',
+        ]);
+        $carrito=carrito::select('*')
+                ->where('status_id','=','1')
+                ->where('id','=',$request->input('carrito_id'))
+                ->first();
+        if ($carrito) {
+            $detalle_carrito = new detalle_carrito::select('id')->where('id','=',$request->input('producto_id'))->first();
+            if ($detalle_carrito) {
+                if($detalle_carrito->delete()){
+                    return response()->json([
+                        'status'    => 'success',
+                        "data"      =>  $carrito,
+                        'msg'       => "information successfully registered"
+                    ]);
+                }else{
+                    return response()->json([
+                        'status'    => 'error',
+                        'msg'       => "product not found"
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'status'    => 'error',
+                    'msg'       => "information could not be successfully registered"
+                ]);
+            }
+
+        }else{
+            return response()->json([
+                'status'    => 'error',
+                'msg'       => "shopping cart not found"
+            ]);
+        }
+    }
     public function addProducto(Request $request){
         $this->validate($request,[
             'producto_id'   => 'required',
