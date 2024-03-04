@@ -6,7 +6,9 @@ use App\Models\carrito;
 use App\Models\detalle_carrito;
 use App\Models\categorias;
 use App\Models\pedidos;
+use App\Models\factura;
 use App\Models\detalle_pedidos;
+use App\Models\detalle_factura;
 use App\Models\productos;
 
 use Illuminate\Http\Request;
@@ -97,16 +99,175 @@ class IntendenciaController extends Controller
 
     }
     public function getFactura(){
+        $this->validate($request,[
+            'users_id'      => 'required',
+        ]);
+        $pedido=factura::select("*")
+        ->where('users_id','=',$request->input('users_id'))
+        ->join('detalle_factura', 'detalle_factura.factura_id = factura.id')
+        ->get()
+        ->toArray();
+        if(count($pedido)>0){
+            return response()->json([
+                'status'    => 'success',
+                'data'      => $pedido,
+                'msg'       => "information successfully"
+            ]);
+        }else{
+            return response()->json([
+                'status'    => 'error',
+                'msg'       => "information could not be successfully"
+            ]);
+        }
 
     }
     public function createFactura(){
+        $this->validate($request,[
+            'users_id'      => 'required',
+            'pedido_id'    => 'required'
+        ]);
+        $carrito=pedidos::select('*')
+        ->where('status_id','=','1')
+        ->where('users_id','=',$request->input('users_id'))
+        ->where('id','=',$request->input('pedido_id'))
+        ->first();
+        if ($carrito) {
+            $pedido = new factura();
+            $pedido->users_id = $carrito->users_id;
+            $pedido->fecha    = $carrito->fecha;
+            $pedido->total    = $carrito->total;
+            $pedido->iva      = $carrito->iva;
+            $pedido->status_id= 3;
 
+            if($pedido->save()){
+                $detalle_carrito=detalle_pedidos::select('*')
+                ->where('pedido_id','=',$request->input('pedido_id'))
+                ->get();
+                $error=false;
+                $idDetalle = array();
+                foreach ($detalle_carrito as $key => $value) {
+                    $detalle=new detalle_factura();
+                    $detalle->cantidad=$value->cantidad;
+                    $detalle->subtotal=$value->precio;
+                    $detalle->producto_id=$value->producto_id;
+                    $detalle->pedidos_id=$pedido->id;
+                    $saveDetalle = $detalle->save();
+                    if(!$saveDetalle){
+                        $error=true;
+                        return response()->json([
+                            'status'    => 'error',
+                            'msg'       => "shopping cart not found"
+                        ]);
+                    }
+                    array_push($idDetalle,$value->id);
+                }
+                if($error==false){
+                    return response()->json([
+                        'status'    => 'success',
+                        "data"      =>  $carrito,
+                        'msg'       => "information successfully registered"
+                    ]);
+                }
+            }
+
+        }else{
+            return response()->json([
+                'status'    => 'error',
+                'msg'       => "shopping cart not found"
+            ]);
+        }
     }
     public function getPago(){
 
     }
     public function createPago(){
 
+    }
+    public function dltProducto(Request $request){
+        $this->validate($request,[
+            'producto_id'   => 'required',
+            'carrito_id'    => 'required',
+        ]);
+        $carrito=carrito::select('*')
+                ->where('status_id','=','1')
+                ->where('id','=',$request->input('carrito_id'))
+                ->first();
+        if ($carrito) {
+            $detalle_carrito = new detalle_carrito::select('id')->where('id','=',$request->input('producto_id'))->first();
+            if ($detalle_carrito) {
+                if($detalle_carrito->delete()){
+                    return response()->json([
+                        'status'    => 'success',
+                        "data"      =>  $carrito,
+                        'msg'       => "information successfully registered"
+                    ]);
+                }else{
+                    return response()->json([
+                        'status'    => 'error',
+                        'msg'       => "product not found"
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'status'    => 'error',
+                    'msg'       => "information could not be successfully registered"
+                ]);
+            }
+
+        }else{
+            return response()->json([
+                'status'    => 'error',
+                'msg'       => "shopping cart not found"
+            ]);
+        }
+    }
+    public function changeCantProducto(Request $request){
+        $this->validate($request,[
+            'producto_id'   => 'required',
+            'carrito_id'    => 'required',
+            'cantidad'      => 'required',
+            'subtotal'      => 'required',
+        ]);
+        $carrito=carrito::select('*')
+                ->where('status_id','=','1')
+                ->where('id','=',$request->input('carrito_id'))
+                ->first();
+        if ($carrito) {
+            $producto = productos::select('id')->where('id','=',$request->input('producto_id'))->first();
+            if ($producto) {
+                $detalle_carrito = new detalle_carrito::select('*')
+                    ->where('carrito_id','=',$request->input('carrito_id'))
+                    ->where('producto_id','=',$request->input('producto_id'))
+                    ->first();
+
+                    $detalle_carrito->cantidad = $request->input('cantidad');
+                    $detalle_carrito->subtotal = $request->input('subtotal');
+
+                if($detalle_carrito->save()){
+                    return response()->json([
+                        'status'    => 'success',
+                        "data"      =>  $carrito,
+                        'msg'       => "information successfully registered"
+                    ]);
+                }else{
+                    return response()->json([
+                        'status'    => 'error',
+                        'msg'       => "product not found"
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'status'    => 'error',
+                    'msg'       => "information could not be successfully registered"
+                ]);
+            }
+
+        }else{
+            return response()->json([
+                'status'    => 'error',
+                'msg'       => "shopping cart not found"
+            ]);
+        }
     }
     public function addProducto(Request $request){
         $this->validate($request,[
