@@ -25,6 +25,7 @@ Route::prefix('carrito')->group(function () {
     Route::get('/', [App\Http\Controllers\IntendenciaController::class, 'getCarrito']);
     Route::post('/add', [App\Http\Controllers\IntendenciaController::class, 'addProducto']);
     Route::post('/delete', [App\Http\Controllers\IntendenciaController::class, 'dltProducto']);
+    Route::post('/changecant', [App\Http\Controllers\IntendenciaController::class, 'changeCantProducto']);
     Route::post('/', [App\Http\Controllers\IntendenciaController::class, 'createCarrito']);
 });
 

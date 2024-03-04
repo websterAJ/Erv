@@ -221,6 +221,54 @@ class IntendenciaController extends Controller
             ]);
         }
     }
+    public function changeCantProducto(Request $request){
+        $this->validate($request,[
+            'producto_id'   => 'required',
+            'carrito_id'    => 'required',
+            'cantidad'      => 'required',
+            'subtotal'      => 'required',
+        ]);
+        $carrito=carrito::select('*')
+                ->where('status_id','=','1')
+                ->where('id','=',$request->input('carrito_id'))
+                ->first();
+        if ($carrito) {
+            $producto = productos::select('id')->where('id','=',$request->input('producto_id'))->first();
+            if ($producto) {
+                $detalle_carrito = new detalle_carrito::select('*')
+                    ->where('carrito_id','=',$request->input('carrito_id'))
+                    ->where('producto_id','=',$request->input('producto_id'))
+                    ->first();
+
+                    $detalle_carrito->cantidad = $request->input('cantidad');
+                    $detalle_carrito->subtotal = $request->input('subtotal');
+
+                if($detalle_carrito->save()){
+                    return response()->json([
+                        'status'    => 'success',
+                        "data"      =>  $carrito,
+                        'msg'       => "information successfully registered"
+                    ]);
+                }else{
+                    return response()->json([
+                        'status'    => 'error',
+                        'msg'       => "product not found"
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'status'    => 'error',
+                    'msg'       => "information could not be successfully registered"
+                ]);
+            }
+
+        }else{
+            return response()->json([
+                'status'    => 'error',
+                'msg'       => "shopping cart not found"
+            ]);
+        }
+    }
     public function addProducto(Request $request){
         $this->validate($request,[
             'producto_id'   => 'required',
