@@ -23,7 +23,7 @@ class IntendenciaController extends Controller
         ]);
         $pedido=pedidos::select("*")
         ->where('users_id','=',$request->input('users_id'))
-        ->join('detalle_pedidos', 'detalle_pedidos.pedido_id = pedidos.id')
+        ->join('detalle_pedidos', 'detalle_pedidos.pedidos_id', '=', 'pedidos.id')
         ->get()
         ->toArray();
         if(count($pedido)>0){
@@ -121,13 +121,13 @@ class IntendenciaController extends Controller
         }
 
     }
-    public function createFactura(){
+    public function createFactura(Request $request){
         $this->validate($request,[
             'users_id'      => 'required',
             'pedido_id'    => 'required'
         ]);
         $carrito=pedidos::select('*')
-        ->where('status_id','=','1')
+        ->where('status_id','=','3')
         ->where('users_id','=',$request->input('users_id'))
         ->where('id','=',$request->input('pedido_id'))
         ->first();
@@ -141,7 +141,7 @@ class IntendenciaController extends Controller
 
             if($pedido->save()){
                 $detalle_carrito=detalle_pedidos::select('*')
-                ->where('pedido_id','=',$request->input('pedido_id'))
+                ->where('pedidos_id','=',$request->input('pedido_id'))
                 ->get();
                 $error=false;
                 $idDetalle = array();
@@ -150,13 +150,13 @@ class IntendenciaController extends Controller
                     $detalle->cantidad=$value->cantidad;
                     $detalle->subtotal=$value->precio;
                     $detalle->producto_id=$value->producto_id;
-                    $detalle->pedidos_id=$pedido->id;
+                    $detalle->facturas_id=$pedido->id;
                     $saveDetalle = $detalle->save();
                     if(!$saveDetalle){
                         $error=true;
                         return response()->json([
                             'status'    => 'error',
-                            'msg'       => "shopping cart not found"
+                            'msg'       => "shopping cart not found 1"
                         ]);
                     }
                     array_push($idDetalle,$value->id);
@@ -173,7 +173,7 @@ class IntendenciaController extends Controller
         }else{
             return response()->json([
                 'status'    => 'error',
-                'msg'       => "shopping cart not found"
+                'msg'       => "shopping cart not found 2"
             ]);
         }
     }
@@ -193,7 +193,9 @@ class IntendenciaController extends Controller
                 ->where('id','=',$request->input('carrito_id'))
                 ->first();
         if ($carrito) {
-            $detalle_carrito = new detalle_carrito::select('id')->where('id','=',$request->input('producto_id'))->first();
+            $detalle_carrito = detalle_carrito::select('id')
+                ->where('producto_id','=',$request->input('producto_id'))
+                ->first();
             if ($detalle_carrito) {
                 if($detalle_carrito->delete()){
                     return response()->json([
@@ -235,7 +237,7 @@ class IntendenciaController extends Controller
         if ($carrito) {
             $producto = productos::select('id')->where('id','=',$request->input('producto_id'))->first();
             if ($producto) {
-                $detalle_carrito = new detalle_carrito::select('*')
+                $detalle_carrito = detalle_carrito::select('*')
                     ->where('carrito_id','=',$request->input('carrito_id'))
                     ->where('producto_id','=',$request->input('producto_id'))
                     ->first();
@@ -329,7 +331,7 @@ class IntendenciaController extends Controller
             $carrito->status_id=1;
             $carrito->total=0;
             $carrito->iva=0;
-            $carrito->fecha=new Date();
+            $carrito->fecha=now();
             $carrito->users_id=$request->input('users_id');
             if($carrito->save()){
                 return response()->json([
