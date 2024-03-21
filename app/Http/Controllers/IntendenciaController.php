@@ -10,6 +10,7 @@ use App\Models\factura;
 use App\Models\detalle_pedidos;
 use App\Models\detalle_factura;
 use App\Models\productos;
+use App\Models\payments;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -17,6 +18,56 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 class IntendenciaController extends Controller
 {
+    public function createPayments(Request $request){
+        $this->validate($request,[
+            'referencia' => 'required',
+            'fecha' => 'required',
+            'pedido_id' => 'required',
+            'monto' => 'required',
+            'comprobante' => 'required',
+            'pedido_id' => 'required',
+        ]);
+        $pedido=pedidos::select("id")
+        ->where('id','=',$request->input('pedido_id'))
+        ->first();
+        if($pedido){
+            $payments= new payments();
+
+            $file = $request->file('comprobante');
+            $filename  = time()."-".$file->getClientOriginalName();
+            Storage::disk('local')->put("public/payments/".trim($filename," \n\r\t\v\0"), File::get($file));
+            $payments->comprobante = $filename;
+            $payments->estatus_id = 3;
+            $payments->referencia = $request->input('referencia');
+            $payments->fecha = $request->input('fecha');
+            $payments->pedido_id = $request->input('pedido_id');
+            $payments->monto = $request->input('monto');
+            if($payments->save()){
+                /*// busqueda de correo del usuario
+                    $user = User::select("personas.correo")
+                    ->join('personas', 'users.persona_id', '=', 'personas.id')
+                    ->where('users.id','=',Auth::id())
+                    ->first();
+                // cambio de estatus de la cuota
+                $updcuota =cuotaszonas::select("*")
+                ->where('id','=',$request->input('cuota_id'))
+                ->first();
+                $updcuota->estatus_id = 3;
+                $updcuota->update();
+
+                Mail::to($user->correo)->send(new ReportePagoMail());*/
+                return response()->json([
+                    'status'    => 'success',
+                    'msg'       => "information successfully registered"
+                ]);
+            }else{
+                return response()->json([
+                    'status'    => 'error',
+                    'msg'       => "information could not be successfully registered"
+                ]);
+            }
+        }
+    }
     public function getPedido(Request $request){
         $this->validate($request,[
             'users_id'      => 'required',
@@ -178,9 +229,6 @@ class IntendenciaController extends Controller
         }
     }
     public function getPago(){
-
-    }
-    public function createPago(){
 
     }
     public function dltProducto(Request $request){
