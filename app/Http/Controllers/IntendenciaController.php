@@ -340,7 +340,10 @@ class IntendenciaController extends Controller
                     'cantidad'      => $request->input('cantidad'),
                     'subtotal'      => $request->input('subtotal')
                 ]);
+                $carrito->total += $request->input('subtotal');
+                $carrito->iva = $carrito->total*0.16;
                 if($detalle_carrito->save()){
+                    $carrito->save();
                     return response()->json([
                         'status'    => 'success',
                         "data"      =>  $carrito,
