@@ -246,6 +246,7 @@ class IntendenciaController extends Controller
                 $carrito->total -= $detalle_carrito->subtotal;
                 $carrito->iva = $carrito->total*0.16;
                 if($detalle_carrito->delete()){
+                    $carrito->save();
                     return response()->json([
                         'status'    => 'success',
                         "data"      =>  $carrito,
