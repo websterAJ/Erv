@@ -41,5 +41,5 @@ Route::prefix('factura')->group(function () {
 
 Route::prefix('pago')->group(function () {
     Route::get('/', [App\Http\Controllers\IntendenciaController::class, 'getPago']);
-    Route::post('/', [App\Http\Controllers\IntendenciaController::class, 'createPago']);
+    Route::post('/', [App\Http\Controllers\IntendenciaController::class, 'createPayments']);
 });
