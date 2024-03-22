@@ -243,6 +243,8 @@ class IntendenciaController extends Controller
         if ($carrito) {
             $detalle_carrito = new detalle_carrito::select('id')->where('id','=',$request->input('producto_id'))->first();
             if ($detalle_carrito) {
+                $carrito->total -= $detalle_carrito->subtotal;
+                $carrito->iva = $carrito->total*0.16;
                 if($detalle_carrito->delete()){
                     return response()->json([
                         'status'    => 'success',
@@ -339,7 +341,7 @@ class IntendenciaController extends Controller
                     'subtotal'      => $request->input('subtotal')
                 ]);
                 $carrito->total += $request->input('subtotal');
-                $carrito->iva += $carrito->total*0.16;
+                $carrito->iva = $carrito->total*0.16;
                 if($detalle_carrito->save()){
                     $carrito->save();
                     return response()->json([
