@@ -241,13 +241,14 @@ class IntendenciaController extends Controller
                 ->where('id','=',$request->input('carrito_id'))
                 ->first();
         if ($carrito) {
-            $detalle_carrito = detalle_carrito::select('id')
+            $detalle_carrito = detalle_carrito::select('*')
                 ->where('producto_id','=',$request->input('producto_id'))
                 ->first();
             if ($detalle_carrito) {
                 $carrito->total -= $detalle_carrito->subtotal;
                 $carrito->iva = $carrito->total*0.16;
                 if($detalle_carrito->delete()){
+                    $carrito->save();
                     return response()->json([
                         'status'    => 'success',
                         "data"      =>  $carrito,
@@ -280,10 +281,12 @@ class IntendenciaController extends Controller
             'cantidad'      => 'required',
             'subtotal'      => 'required',
         ]);
-        $carrito=carrito::select('*')
-                ->where('status_id','=','1')
-                ->where('id','=',$request->input('carrito_id'))
-                ->first();
+    
+        $carrito = carrito::select('*')
+            ->where('status_id','=','1')
+            ->where('id','=',$request->input('carrito_id'))
+            ->first();
+    
         if ($carrito) {
             $producto = productos::select('id')->where('id','=',$request->input('producto_id'))->first();
             if ($producto) {
@@ -291,36 +294,49 @@ class IntendenciaController extends Controller
                     ->where('carrito_id','=',$request->input('carrito_id'))
                     ->where('producto_id','=',$request->input('producto_id'))
                     ->first();
-
+    
+                if ($detalle_carrito) {
+                    $old_subtotal = $detalle_carrito->subtotal;
+                    $old_cantidad = $detalle_carrito->cantidad;
+    
                     $detalle_carrito->cantidad = $request->input('cantidad');
                     $detalle_carrito->subtotal = $request->input('subtotal');
-
-                if($detalle_carrito->save()){
-                    return response()->json([
-                        'status'    => 'success',
-                        "data"      =>  $carrito,
-                        'msg'       => "information successfully registered"
-                    ]);
-                }else{
+    
+                    $carrito->total += ($detalle_carrito->subtotal - $old_subtotal);
+                    $carrito->iva = $carrito->total * 0.16;
+    
+                    if($detalle_carrito->save() && $carrito->save()){
+                        return response()->json([
+                            'status'    => 'success',
+                            "data"      =>  $carrito,
+                            'msg'       => "Information successfully updated"
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status'    => 'error',
+                            'msg'       => "Failed to update information"
+                        ]);
+                    }
+                } else {
                     return response()->json([
                         'status'    => 'error',
-                        'msg'       => "product not found"
+                        'msg'       => "Product not found in cart"
                     ]);
                 }
-            }else{
+            } else {
                 return response()->json([
                     'status'    => 'error',
-                    'msg'       => "information could not be successfully registered"
+                    'msg'       => "Product not found"
                 ]);
             }
-
-        }else{
+        } else {
             return response()->json([
                 'status'    => 'error',
-                'msg'       => "shopping cart not found"
+                'msg'       => "Shopping cart not found"
             ]);
         }
     }
+    
     public function addProducto(Request $request){
         $this->validate($request,[
             'producto_id'   => 'required',
