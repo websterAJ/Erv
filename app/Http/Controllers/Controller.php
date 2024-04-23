@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\estatus;
 use App\Models\zonas;
 use App\Models\ascensos;
+use App\Models\cargos;
 use App\Models\tipo_personas;
 use App\Models\cuotaszonas;
 use App\Models\categorias;
@@ -56,6 +57,12 @@ class Controller extends BaseController
                             ->toArray();
                             $data['categorias'] = $categorias;
                             break;
+                            case 'cargos_id':
+                                $cargos = cargos::select('*')
+                                ->get()
+                                ->toArray();
+                                $data['cargos'] = $cargos;
+                                break;
                     }
                 }
             }

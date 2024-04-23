@@ -408,6 +408,28 @@ return [
                     'text'    => 'Reporte',
                     'icon'    => 'fas fa-fw fa-chart-pie',
                     'url'     => '/web/contactanos',
+                ],
+                [
+                    'text'    => 'Directivas',
+                    'icon'    => 'fas fa-fw fa-users',
+                    'url'     => '/web/directiva',
+                ]
+            ],
+        ],
+        ['header' => 'Organizacion',],
+        [
+            'text'        => 'Cargos',
+            'url'         => '/cargos',
+            'icon'        => 'fa fa-fw fa-home'
+        ],
+        [
+            'text'    => 'Organigrama',
+            'icon'    => 'fas fa-fw fa-globe',
+            'submenu' => [
+                [
+                    'text' => 'Nacional',
+                    'icon'    => 'fas fa-fw fa-image',
+                    'url'  => '/web/banner',
                 ]
             ],
         ],

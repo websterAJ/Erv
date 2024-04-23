@@ -34,7 +34,7 @@
                                         }
                                     @endphp
                                     <label for="{{$campos[$key]->Field}}">{{__('adminlte::adminlte.'.$label)}}</label>
-                                    @if ($campos[$key]->Field == "categoria_id" ||$campos[$key]->Field == "cuota_id" || $campos[$key]->Field == 'estatus_id' || $campos[$key]->Field == 'zona_id')
+                                    @if ($campos[$key]->Field == "categoria_id" ||$campos[$key]->Field == "cuota_id" || $campos[$key]->Field == 'estatus_id' || $campos[$key]->Field == 'zona_id' || $campos[$key]->Field == 'cargos_id')
                                         <select name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
                                             <option value="0">Seleccionar una opcion</option>
                                             @switch($campos[$key]->Field)
@@ -45,6 +45,11 @@
                                                     @break
                                                 @case('estatus_id')
                                                     @foreach ($status as $option)
+                                                        <option value="{{$option['id']}}">{{$option['nombre']}}</option>
+                                                    @endforeach
+                                                    @break
+                                                @case('cargos_id')
+                                                    @foreach ($cargos as $option)
                                                         <option value="{{$option['id']}}">{{$option['nombre']}}</option>
                                                     @endforeach
                                                     @break
