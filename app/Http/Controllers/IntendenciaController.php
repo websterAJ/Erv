@@ -149,7 +149,7 @@ class IntendenciaController extends Controller
         }
 
     }
-    public function getFactura(){
+    public function getFactura(Request $request){
         $this->validate($request,[
             'users_id'      => 'required',
         ]);
@@ -281,12 +281,12 @@ class IntendenciaController extends Controller
             'cantidad'      => 'required',
             'subtotal'      => 'required',
         ]);
-    
+
         $carrito = carrito::select('*')
             ->where('status_id','=','1')
             ->where('id','=',$request->input('carrito_id'))
             ->first();
-    
+
         if ($carrito) {
             $producto = productos::select('id')->where('id','=',$request->input('producto_id'))->first();
             if ($producto) {
@@ -294,17 +294,17 @@ class IntendenciaController extends Controller
                     ->where('carrito_id','=',$request->input('carrito_id'))
                     ->where('producto_id','=',$request->input('producto_id'))
                     ->first();
-    
+
                 if ($detalle_carrito) {
                     $old_subtotal = $detalle_carrito->subtotal;
                     $old_cantidad = $detalle_carrito->cantidad;
-    
+
                     $detalle_carrito->cantidad = $request->input('cantidad');
                     $detalle_carrito->subtotal = $request->input('subtotal');
-    
+
                     $carrito->total += ($detalle_carrito->subtotal - $old_subtotal);
                     $carrito->iva = $carrito->total * 0.16;
-    
+
                     if($detalle_carrito->save() && $carrito->save()){
                         return response()->json([
                             'status'    => 'success',
@@ -336,7 +336,7 @@ class IntendenciaController extends Controller
             ]);
         }
     }
-    
+
     public function addProducto(Request $request){
         $this->validate($request,[
             'producto_id'   => 'required',

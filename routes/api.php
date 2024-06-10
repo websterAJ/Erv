@@ -46,6 +46,7 @@ Route::prefix('pago')->group(function () {
 });
 
 Route::prefix('auth')->group(function () {
-    Route::get('/register', [App\Http\Controllers\UserController::class, 'RegisterApi']);
+    Route::post('/register', [App\Http\Controllers\UserController::class, 'RegisterApi']);
     Route::post('/login', [App\Http\Controllers\UserController::class, 'LoginApi']);
+    Route::get('/profile', [App\Http\Controllers\UserController::class, 'profileApi']);
 });
