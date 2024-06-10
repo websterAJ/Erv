@@ -22,6 +22,25 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/perfil', [App\Http\Controllers\UserController::class, 'perfil'])->name('perfil');
 
+Route::prefix('cargos')->group(function () {
+    Route::get('/', [App\Http\Controllers\CargosController::class, 'index']);
+    Route::get('/create', [App\Http\Controllers\CargosController::class, 'create']);
+    Route::get('/edit/{$id}', [App\Http\Controllers\CargosController::class, 'edit']);
+    Route::post('/create', [App\Http\Controllers\CargosController::class, 'store']);
+    Route::post('/delete/{$id}', [App\Http\Controllers\CargosController::class, 'delete']);
+    Route::post('/update', [App\Http\Controllers\CargosController::class, 'update']);
+});
+
+Route::prefix('directiva')->group(function () {
+    Route::get('/', [App\Http\Controllers\directivasController::class, 'index']);
+    Route::get('/create', [App\Http\Controllers\directivasController::class, 'create']);
+    Route::get('/edit/{$id}', [App\Http\Controllers\directivasController::class, 'edit']);
+    Route::post('/create', [App\Http\Controllers\directivasController::class, 'store']);
+    Route::post('/delete/{$id}', [App\Http\Controllers\directivasController::class, 'delete']);
+    Route::post('/update', [App\Http\Controllers\directivasController::class, 'update']);
+});
+
+
 Route::prefix('web')->group(function () {
     Route::get('/', [App\Http\Controllers\WebController::class, 'show']);
     Route::get('/banner', [App\Http\Controllers\WebController::class, 'show']);

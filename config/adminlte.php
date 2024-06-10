@@ -320,12 +320,7 @@ return [
                     'text' => 'Listado zonas',
                     'icon'    => 'fas fa-fw fa-list',
                     'url'  => '/zonas',
-                ],
-                [
-                    'text' => 'Resumen',
-                    'icon'    => 'fas fa-fw fa-chart-pie',
-                    'url'  => '/zonas/resumen',
-                ],
+                ]
             ],
         ],
         [
@@ -346,16 +341,6 @@ return [
                     'text' => 'Listado pagos',
                     'icon'    => 'fas fa-fw fa-list',
                     'url'  => '/tesoreria/pagos',
-                ],
-                [
-                    'text' => 'Resumen',
-                    'icon'    => 'fas fa-fw fa-chart-pie',
-                    'url'  => '/tesoreria/resumen',
-                ],
-                [
-                    'text'    => 'Reporte',
-                    'icon'    => 'fas fa-fw fa-file',
-                    'url'     => '/tesoreria/reporte',
                 ]
             ],
         ],
@@ -372,16 +357,6 @@ return [
                     'text' => 'Pedidos',
                     'icon'    => 'fas fa-fw fa-file-alt',
                     'url'  => '/intendencia/pedidos',
-                ],
-                [
-                    'text' => 'Resumen',
-                    'icon'    => 'fas fa-fw fa-chart-pie',
-                    'url'  => '/intendencia/resumen',
-                ],
-                [
-                    'text'    => 'Reporte',
-                    'icon'    => 'fas fa-fw fa-file',
-                    'url'     => '/intendencia/reporte',
                 ]
             ],
         ],
@@ -405,11 +380,6 @@ return [
                     'url'  => '/web/evento',
                 ],
                 [
-                    'text'    => 'Reporte',
-                    'icon'    => 'fas fa-fw fa-chart-pie',
-                    'url'     => '/web/contactanos',
-                ],
-                [
                     'text'    => 'Directivas',
                     'icon'    => 'fas fa-fw fa-users',
                     'url'     => '/web/directiva',
@@ -429,7 +399,7 @@ return [
                 [
                     'text' => 'Nacional',
                     'icon'    => 'fas fa-fw fa-image',
-                    'url'  => '/web/banner',
+                    'url'  => '/directiva',
                 ]
             ],
         ],

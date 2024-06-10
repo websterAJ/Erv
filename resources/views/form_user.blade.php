@@ -66,6 +66,14 @@
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
                                         </select>
+                                    @elseif ($campos[$key]->Field == "genero")
+                                        <select name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
+                                            <option value="">Seleccionar una opcion</option>
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="Femenina">Femenina</option>
+                                        </select>
+                                    @elseif ($campos[$key]->Field == "password")
+                                        <input type="password" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
                                     @elseif ($campos[$key]->Field == "contenido" || $campos[$key]->Field == "resumen")
                                         @php
                                             $config = [

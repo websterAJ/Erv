@@ -38,6 +38,8 @@ return [
     'monto'                       => 'Monto',
     'nombre'                      => 'Nombre',
     'apellido'                    => 'Apellido',
+    'Persona'                     => 'Persona',
+    'cargos_id'                   => 'Cargo',
     'correo'                      => 'Correo',
     'estatus'                     => 'Estatus',
     'accion'                      => 'Accion',

@@ -1,7 +1,7 @@
 
 <div>
     @foreach ($persona['campos'] as $item => $value)
-        @if($value->Field != 'id'  && $value->Field != 'created_at' && $value->Field != 'updated_at')
+        @if($value->Field != 'id'  && $value->Field != 'created_at' && $value->Field != 'updated_at' && $value->Field != "genero")
             <label for="{{$value->Field}}">{{__('adminlte::adminlte.'.$value->Field)}}</label>
             @if($value->Type == "text" || $value->Type == "varchar(255)")
                 <input type="text" name="{{$value->Field}}" id="{{$value->Field}}" class="form-control {{$errors->has($value->Field) ? 'is-invalid' : ''}}">
@@ -33,6 +33,13 @@
                     @endswitch
                 </select>
             @endif
+        @elseif ($value->Field == "genero")
+            <label for="{{$value->Field}}">{{__('adminlte::adminlte.'.$value->Field)}}</label>
+            <select name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
+                <option value="">Seleccionar una opcion</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenina">Femenina</option>
+            </select>
         @endif
     @endforeach
 </div>

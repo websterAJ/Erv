@@ -44,3 +44,8 @@ Route::prefix('pago')->group(function () {
     Route::get('/', [App\Http\Controllers\IntendenciaController::class, 'getPago']);
     Route::post('/', [App\Http\Controllers\IntendenciaController::class, 'createPayments']);
 });
+
+Route::prefix('auth')->group(function () {
+    Route::get('/register', [App\Http\Controllers\UserController::class, 'RegisterApi']);
+    Route::post('/login', [App\Http\Controllers\UserController::class, 'LoginApi']);
+});

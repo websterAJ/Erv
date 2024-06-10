@@ -12,6 +12,7 @@ use App\Models\cargos;
 use App\Models\tipo_personas;
 use App\Models\cuotaszonas;
 use App\Models\categorias;
+use App\Models\personas;
 use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
@@ -57,12 +58,19 @@ class Controller extends BaseController
                             ->toArray();
                             $data['categorias'] = $categorias;
                             break;
-                            case 'cargos_id':
-                                $cargos = cargos::select('*')
-                                ->get()
-                                ->toArray();
-                                $data['cargos'] = $cargos;
-                                break;
+                        case 'cargos_id':
+                            $cargos = cargos::select('*')
+                            ->get()
+                            ->toArray();
+                            $data['cargos'] = $cargos;
+                            break;
+                        case 'personas_id':
+                            $cargos = personas::select('*')
+                            ->where("id","!=","1")
+                            ->get()
+                            ->toArray();
+                            $data['personas'] = $cargos;
+                            break;
                     }
                 }
             }

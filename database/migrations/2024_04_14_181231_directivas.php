@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('directivas', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->unique();
+            $table->string('imagen')->unique();
             $table->unsignedBigInteger('cargos_id');
             $table->foreign("cargos_id")
                 ->references('id')

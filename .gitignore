@@ -18,3 +18,7 @@ yarn-error.log
 /.idea
 /.vscode
 /.vite
+.env1
+.env2
+erv.zip
+error_log

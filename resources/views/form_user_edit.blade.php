@@ -25,9 +25,6 @@
                                             case 'estatus_id':
                                                 $label= "Estatus";
                                                 break;
-                                            case 'personas_id':
-                                                $label = "Persona";
-                                                break;
                                             case 'zona_id':
                                                 $label= "Zona";
                                                 break;
@@ -37,7 +34,7 @@
                                         }
                                     @endphp
                                     <label for="{{$campos[$key]->Field}}">{{__('adminlte::adminlte.'.$label)}}</label>
-                                    @if ($campos[$key]->Field == "categoria_id" ||$campos[$key]->Field == "cuota_id" || $campos[$key]->Field == 'estatus_id' || $campos[$key]->Field == 'zona_id' || $campos[$key]->Field == 'cargos_id' || $campos[$key]->Field == 'personas_id')
+                                    @if ($campos[$key]->Field == "categoria_id" ||$campos[$key]->Field == "cuota_id" || $campos[$key]->Field == 'estatus_id' || $campos[$key]->Field == 'zona_id')
                                         <select name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
                                             <option value="0">Seleccionar una opcion</option>
                                             @switch($campos[$key]->Field)
@@ -51,19 +48,9 @@
                                                         <option value="{{$option['id']}}">{{$option['nombre']}}</option>
                                                     @endforeach
                                                     @break
-                                                @case('cargos_id')
-                                                    @foreach ($cargos as $option)
-                                                        <option value="{{$option['id']}}">{{$option['nombre']}}</option>
-                                                    @endforeach
-                                                    @break
                                                 @case('zona_id')
                                                     @foreach ($zonas as $option)
                                                         <option value="{{$option['id']}}">{{$option['nombre']}}</option>
-                                                    @endforeach
-                                                    @break
-                                                @case('personas_id')
-                                                    @foreach ($personas as $option)
-                                                        <option value="{{$option['id']}}">{{$option['nombre']." ".$option['apellido']}}</option>
                                                     @endforeach
                                                     @break
                                                 @case('categoria_id')
@@ -84,7 +71,6 @@
                                             $config = [
                                                 "height" => "250",
                                                 "toolbar" => [
-                                                    // [groupName, [list of button]]
                                                     ['style', ['bold', 'italic', 'underline', 'clear']],
                                                     ['font', ['strikethrough', 'superscript', 'subscript']],
                                                     ['fontsize', ['fontsize']],
@@ -99,16 +85,10 @@
                                         @endphp
                                         <x-adminlte-text-editor name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" label-class="text-danger"
                                         igroup-size="sm" :config="$config"/>
-                                    @elseif ($campos[$key]->Field == "comprobante" || $campos[$key]->Field == "imagen" || $campos[$key]->Field == "flayer")
+                                        @elseif ($campos[$key]->Field == "persona_id")
+                                            @include('partials.forms.personas')
+                                        @elseif ($campos[$key]->Field == "comprobante" || $campos[$key]->Field == "imagen" || $campos[$key]->Field == "flayer")
                                         <input type="file" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}" accept="image/*,.pdf">
-                                    @elseif ($campos[$key]->Field == "genero")
-                                        <select name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
-                                            <option value="">Seleccionar una opcion</option>
-                                            <option value="Masculino">Masculino</option>
-                                            <option value="Femenina">Femenina</option>
-                                        </select>
-                                    @elseif ($campos[$key]->Field == "password")
-                                        <input type="password" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
                                     @else
                                         @if($campos[$key]->Type == "text" || $campos[$key]->Type == "varchar(255)")
                                             <input type="text" name="{{$campos[$key]->Field}}" id="{{$campos[$key]->Field}}" class="form-control {{$errors->has($campos[$key]->Field) ? 'is-invalid' : ''}}">
