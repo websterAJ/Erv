@@ -25,7 +25,6 @@ class IntendenciaController extends Controller
             'pedido_id' => 'required',
             'monto' => 'required',
             'comprobante' => 'required',
-            'pedido_id' => 'required',
         ]);
         $pedido=pedidos::select("id")
         ->where('id','=',$request->input('pedido_id'))
@@ -356,9 +355,9 @@ class IntendenciaController extends Controller
                     'producto_id'   => $request->input('producto_id'),
                     'carrito_id'    => $request->input('carrito_id'),
                     'cantidad'      => $request->input('cantidad'),
-                    'subtotal'      => $request->input('subtotal')
+                    'subtotal'      => $request->input('subtotal') * $request->input('cantidad')
                 ]);
-                $carrito->total += $request->input('subtotal');
+                $carrito->total += $request->input('subtotal') * $request->input('cantidad');
                 $carrito->iva = $carrito->total*0.16;
                 if($detalle_carrito->save()){
                     $carrito->save();
