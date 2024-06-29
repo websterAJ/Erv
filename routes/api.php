@@ -45,8 +45,19 @@ Route::prefix('pago')->group(function () {
     Route::post('/', [App\Http\Controllers\IntendenciaController::class, 'createPayments']);
 });
 
-Route::prefix('auth')->group(function () {
-    Route::post('/register', [App\Http\Controllers\UserController::class, 'RegisterApi']);
-    Route::post('/login', [App\Http\Controllers\UserController::class, 'LoginApi']);
-    Route::get('/profile', [App\Http\Controllers\UserController::class, 'profileApi']);
+Route::prefix('users')->group(function () {
+    Route::post('/register', [App\Http\Controllers\apicontroller::class, 'RegisterApi']);
+    Route::post('/login', [App\Http\Controllers\apicontroller::class, 'LoginApi']);
+
+});
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', [App\Http\Controllers\apicontroller::class, 'login']);
+    Route::post('signup', [App\Http\Controllers\apicontroller::class, 'signUp']);
+
+    Route::group(['middleware' => 'auth:api' ], function() {
+        Route::get('logout',[App\Http\Controllers\apicontroller::class, 'logout']);
+        Route::get('user', [App\Http\Controllers\apicontroller::class, 'user']);
+        Route::get('profile', [App\Http\Controllers\apicontroller::class, 'profileApi']);
+    });
 });

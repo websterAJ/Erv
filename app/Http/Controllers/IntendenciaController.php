@@ -25,6 +25,7 @@ class IntendenciaController extends Controller
             'pedido_id' => 'required',
             'monto' => 'required',
             'comprobante' => 'required',
+            'pedido_id' => 'required',
         ]);
         $pedido=pedidos::select("id")
         ->where('id','=',$request->input('pedido_id'))
@@ -42,6 +43,9 @@ class IntendenciaController extends Controller
             $payments->pedido_id = $request->input('pedido_id');
             $payments->monto = $request->input('monto');
             if($payments->save()){
+                $pedido->estatus_id = 3;
+                $pedido->save();
+
                 /*// busqueda de correo del usuario
                     $user = User::select("personas.correo")
                     ->join('personas', 'users.persona_id', '=', 'personas.id')
@@ -355,9 +359,9 @@ class IntendenciaController extends Controller
                     'producto_id'   => $request->input('producto_id'),
                     'carrito_id'    => $request->input('carrito_id'),
                     'cantidad'      => $request->input('cantidad'),
-                    'subtotal'      => $request->input('subtotal') * $request->input('cantidad')
+                    'subtotal'      => $request->input('subtotal')
                 ]);
-                $carrito->total += $request->input('subtotal') * $request->input('cantidad');
+                $carrito->total += $request->input('subtotal');
                 $carrito->iva = $carrito->total*0.16;
                 if($detalle_carrito->save()){
                     $carrito->save();
@@ -451,7 +455,9 @@ class IntendenciaController extends Controller
         if($request->is('api/categorias')){
             $dta = categorias::select(['*'])->where('activo',"=","1")->get()->toArray();
         }else if($request->is('api/productos')){
-            $sql = productos::select(['id','nombre', 'descripcion', 'stock', 'precio', 'imagen'])->where('activo',"=","1")->get()->toArray();
+            $sql = productos::select(['id','nombre', 'descripcion', 'stock', 'precio', 'imagen'])
+            ->join("categorias","productos.categoria_id","=","categorias.id")
+            ->where('activo',"=","1")->get()->toArray();
             $dataConvert = array();
             foreach ($sql as $key=>$value) {
                 $aux                = (object)array();
