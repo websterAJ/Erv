@@ -45,11 +45,6 @@ Route::prefix('pago')->group(function () {
     Route::post('/', [App\Http\Controllers\IntendenciaController::class, 'createPayments']);
 });
 
-Route::prefix('users')->group(function () {
-    Route::post('/register', [App\Http\Controllers\apicontroller::class, 'RegisterApi']);
-    Route::post('/login', [App\Http\Controllers\apicontroller::class, 'LoginApi']);
-
-});
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [App\Http\Controllers\apicontroller::class, 'login']);
