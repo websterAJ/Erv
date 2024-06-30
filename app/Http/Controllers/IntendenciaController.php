@@ -455,9 +455,10 @@ class IntendenciaController extends Controller
         if($request->is('api/categorias')){
             $dta = categorias::select(['*'])->where('activo',"=","1")->get()->toArray();
         }else if($request->is('api/productos')){
-            $sql = productos::select(['id','nombre', 'descripcion', 'stock', 'precio', 'imagen'])
-            ->join("categorias","productos.categoria_id","=","categorias.id")
-            ->where('activo',"=","1")->get()->toArray();
+            $sql = productos::select(['productos.id','productos.nombre', 'productos.descripcion', 'productos.stock', 'productos.precio', 'productos.imagen'])
+            ->join("categorias_productos","categorias_productos.producto_id","=","productos.id")
+            ->join("categorias","categorias_productos.categoria_id","=","categorias.id")
+            ->where('productos.activo',"=","1")->get()->toArray();
             $dataConvert = array();
             foreach ($sql as $key=>$value) {
                 $aux                = (object)array();
