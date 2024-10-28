@@ -11,7 +11,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body text-center">
-                    <h2 class="mb-0">Bienvenido</h2>
+                    <h2 class="mb-0">Bienvenido {{ Auth::user()->name }}</h2>
                 </div>
             </div>
         </div>

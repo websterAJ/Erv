@@ -16,7 +16,7 @@ class CargosController extends Controller
         $dta = array();
         $columnas = array();
         $createURL ='/cargos/create';
-        $dta = Cargos::select(['*'])->get()->toArray();
+        $dta = Cargos::select(['id','nombre','activo'])->get()->toArray();
         if(count($dta)>0){
             $columnas= array_keys($dta[0]);
         }
@@ -32,6 +32,7 @@ class CargosController extends Controller
         $view='form';
         $data=$this->DescribeTabla("cargos");
         $data['url'] = "/cargos/create/";
+        $data['file'] = false;
         return view($view,$data);
     }
 

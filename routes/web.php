@@ -19,8 +19,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/perfil', [App\Http\Controllers\UserController::class, 'perfil'])->name('perfil');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/perfil', [App\Http\Controllers\UserController::class, 'perfil'])->name('perfil')->middleware('auth');
 
 Route::prefix('cargos')->group(function () {
     Route::get('/', [App\Http\Controllers\CargosController::class, 'index']);
@@ -54,7 +54,7 @@ Route::prefix('web')->group(function () {
     Route::get('/reporte', [App\Http\Controllers\WebController::class, 'show']);
     Route::post('/', [App\Http\Controllers\WebController::class, 'create']);
     Route::post('/update', [App\Http\Controllers\WebController::class, 'update']);
-});
+})->middleware('auth');
 
 Route::prefix('intendencia')->group(function () {
     Route::get('/producto', [App\Http\Controllers\IntendenciaController::class, 'show']);
@@ -65,7 +65,7 @@ Route::prefix('intendencia')->group(function () {
     Route::post('/create/{tabla}', [App\Http\Controllers\IntendenciaController::class, 'store']);
     Route::post('/', [App\Http\Controllers\IntendenciaController::class, 'create']);
     Route::post('/update', [App\Http\Controllers\IntendenciaController::class, 'update']);
-});
+})->middleware('auth');
 
 Route::prefix('zonas')->group(function () {
     Route::get('/', [App\Http\Controllers\ZonasController::class, 'show']);
@@ -74,7 +74,7 @@ Route::prefix('zonas')->group(function () {
     Route::get('/reporte', [App\Http\Controllers\ZonasController::class, 'show']);
     Route::post('/', [App\Http\Controllers\ZonasController::class, 'create']);
     Route::post('/update', [App\Http\Controllers\ZonasController::class, 'update']);
-});
+})->middleware('auth');
 
 Route::prefix('tesoreria')->group(function () {
     Route::get('/', [App\Http\Controllers\TesoreriaController::class, 'show']);
@@ -86,7 +86,7 @@ Route::prefix('tesoreria')->group(function () {
     Route::get('/reporte', [App\Http\Controllers\TesoreriaController::class, 'show']);
     Route::post('/registro', [App\Http\Controllers\TesoreriaController::class, 'store']);
     Route::post('/update', [App\Http\Controllers\TesoreriaController::class, 'update']);
-});
+})->middleware('auth');
 
 Route::prefix('admin')->group(function () {
     Route::prefix('usuarios')->group(function () {
@@ -101,4 +101,4 @@ Route::prefix('admin')->group(function () {
     Route::get('/roles', [App\Http\Controllers\RolesController::class, 'show'])->name('roles');
     Route::get('/config', [App\Http\Controllers\ConfigController::class, 'show'])->name('config');
     Route::post('/config', [App\Http\Controllers\ConfigController::class, 'store']);
-});
+})->middleware('auth');

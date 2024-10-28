@@ -47,6 +47,7 @@
                     <a href="{{$createURL}}" class="btn btn-md btn-primary mb-2" title="Nuevo Registro">
                         <i class="fa fa-lg fa-fw fa-plus"></i>
                     </a>
+                    @dd($config['data'])
                     @if (count($data)>0)
                         <x-adminlte-datatable id="table1" :heads="$heads">
                             @foreach($config['data'] as $row)

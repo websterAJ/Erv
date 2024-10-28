@@ -16,94 +16,6 @@ class apicontroller extends Controller
 {
     public function signUp(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string'
-        ]);
-
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
-        ]);
-
-        return response()->json([
-            'message' => 'Successfully created user!'
-        ], 201);
-    }
-
-    public function login(Request $request)
-    {
-        $this->validate($request,[
-            'nick' =>'required|string|max:255',
-            'password' =>'required|string|max:255',
-        ]);
-
-        $credentials = request(['nick', 'password']);
-
-        if (!Auth::attempt($credentials))
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
-
-        $user = $request->user();
-        $tokenResult = $user->createToken('AccessToken');
-        $token = $tokenResult->accessToken->token;
-        if ($request->input('remember_me') == true){
-            $date = Carbon::now()->addDays(7);
-            $dateString = $date->format('Y-m-d');
-            $tokenResult->accessToken->expires_at = $dateString;
-            $tokenResult->save();
-        }
-
-        return response()->json([
-            'token' => 'Bearer '.$token,
-            'expires_at' => Carbon::parse($tokenResult->accessToken->expires_at)->toDateTimeString()
-        ]);
-    }
-
-    /**
-     * Cierre de sesión (anular el token)
-     */
-    public function logout(Request $request)
-    {
-        $request->user()->token()->revoke();
-
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
-    }
-
-    /**
-     * Obtener el objeto User como json
-     */
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
-    }
-
-    public function LoginApi(Request $request){
-        $result = (Object)array();
-        $status = 200;
-        $result->error = false;
-        $this->validate($request,[
-            'nick' =>'required|string|max:255',
-            'password' =>'required|string|max:255',
-        ]);
-        if (Auth::attempt(['nick' => $request->input('nick'), 'password' => $request->input('password')])) {
-            $result->error = false;
-            $result->message = "Operacion realizada con exito";
-            $result->data = Auth::user();
-        }else{
-            $status = 500;
-            $result->error = true;
-            $result->message = "Usuario o contraseña incorrectos";
-        }
-        return response()->json($result, $status);
-    }
-
-    public function RegisterApi(Request $request){
         $result = (Object)array();
         $status = 200;
         $result->error = false;
@@ -152,16 +64,78 @@ class apicontroller extends Controller
         return response()->json($result, $status);
     }
 
-    public function profileApi(){
-        $result = (Object)array();
+    public function login(Request $request)
+    {
+        $this->validate($request,[
+            'nick' =>'required|string|max:255',
+            'password' =>'required|string|max:255',
+        ]);
+
+        $credentials = request(['nick', 'password']);
+
+        if (!Auth::attempt($credentials)){
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $user = $request->user();
+        $tokenResult = $user->createToken('AccessToken');
+        $token = $tokenResult->accessToken->token;
+        if ($request->input('remember_me') == true){
+            $date = Carbon::now()->addDays(7);
+            $dateString = $date->format('Y-m-d');
+            $tokenResult->accessToken->expires_at = $dateString;
+            $tokenResult->save();
+        }
+
+        return response()->json([
+            'token' => 'Bearer '.$token,
+            'expires_at' => Carbon::parse($tokenResult->accessToken->expires_at)->toDateTimeString()
+        ]);
+    }
+
+    /**
+     * Cierre de sesión (anular el token)
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
+    }
+
+    /**
+     * Obtener el objeto User como json
+     */
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
+    public function profileApi(Request $request){
+        $result = (object)array();
         $status = 200;
         $result->error = false;
+
+        // Verificar si el usuario está autenticado
+        //dd(Auth::check());
+        /*if (!Auth::check()) {
+            $result->error = true;
+            $result->message = 'Unauthenticated.';
+            $status = 401;
+            return response()->json($result, $status);
+        }
+
         $result->data = User::select("*")
         ->join('personas', 'users.persona_id', '=', 'personas.id')
         ->join('estatus', 'users.estatus_id', '=', 'estatus.id')
-        ->where('users.id','=',Auth::id())
+        ->where('users.id', '=', Auth::id())
         ->get()
         ->toArray();
-        return response()->json($result, $status);
+
+        return response()->json($result, $status);*/
     }
 }
